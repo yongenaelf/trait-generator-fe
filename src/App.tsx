@@ -1,18 +1,15 @@
 import "./App.css";
 
-import { useState } from "react";
-
-import clothes from "./assets/Clothes.json";
-import eyes from "./assets/Eyes.json";
-import hats from "./assets/Hat.json";
-import mouth from "./assets/Mouth.json";
-import pet from "./assets/Pet.json";
-import necklace from "./assets/Necklace.json";
+import { useEffect, useState } from "react";
 
 import { saveAs } from "file-saver";
 
 const randomElement = (myArray: Array<string>) =>
   myArray[Math.floor(Math.random() * myArray.length)];
+
+interface Data {
+  [key: string]: Array<string>;
+}
 
 function App() {
   const [numGen, setNumGen] = useState(1000);
@@ -20,25 +17,41 @@ function App() {
   const [format, setFormat] = useState(
     "Create a cat, wearing %necklace%, wearing %clothes% clothes, %eyes%, wearing %hat%, with %mouth% mouth, with %pet% pet"
   );
+  const [data, setData] = useState<Data>({});
+
+  useEffect(() => {
+    async function getData() {
+      const data = await (await fetch(`/example.json`)).json();
+
+      return data as Data;
+    }
+
+    getData().then((data) => {
+      setData(data);
+
+      const keys = Object.keys(data);
+      setFormat(
+        `Create a cat, ${keys.reduce(
+          (acc, cur, idx) => acc + `${idx !== 0 ? ", " : ""}wears %${cur}%`,
+          ""
+        )}`
+      );
+    });
+  }, []);
 
   const generate = () => {
     let testcases = [];
 
     for (let i = 0; i < numGen; i++) {
-      const _necklace = randomElement(necklace);
-      const _clothes = randomElement(clothes);
-      const _eyes = randomElement(eyes);
-      const _hats = randomElement(hats);
-      const _mouth = randomElement(mouth);
-      const _pet = randomElement(pet);
+      const randomise = Object.keys(data).reduce(
+        (acc, cur) => ({ ...acc, [cur]: randomElement(data[cur]) }),
+        {} as { [key: string]: string }
+      );
 
-      const testcase = format
-        .replace(/%necklace%/g, _necklace)
-        .replace(/%clothes%/g, _clothes)
-        .replace(/%eyes%/g, _eyes)
-        .replace(/%hat%/g, _hats)
-        .replace(/%mouth%/g, _mouth)
-        .replace(/%pet%/g, _pet);
+      const testcase = Object.keys(data).reduce(
+        (acc, cur) => acc.replace(RegExp(`%${cur}%`, "g"), randomise[cur]),
+        format
+      );
 
       testcases.push(testcase);
     }
