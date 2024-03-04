@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import breed from "./assets/breed.json";
 import clothes from "./assets/clothes.json";
