@@ -2,12 +2,12 @@ import "./App.css";
 
 import { useState } from "react";
 
-import breed from "./assets/breed.json";
-import clothes from "./assets/clothes.json";
-import eyes from "./assets/eyes.json";
-import hats from "./assets/hats.json";
-import mouth from "./assets/mouth.json";
-import pet from "./assets/pet.json";
+import clothes from "./assets/Clothes.json";
+import eyes from "./assets/Eyes.json";
+import hats from "./assets/Hat.json";
+import mouth from "./assets/Mouth.json";
+import pet from "./assets/Pet.json";
+import necklace from "./assets/Necklace.json";
 
 import { saveAs } from "file-saver";
 
@@ -18,14 +18,14 @@ function App() {
   const [numGen, setNumGen] = useState(1000);
   const [textarea, setTextarea] = useState("");
   const [format, setFormat] = useState(
-    "Create a %breed% cat, wearing %clothes% clothes, %eyes%, wearing %hat%, with %mouth% mouth, with %pet% pet"
+    "Create a cat, wearing %necklace%, wearing %clothes% clothes, %eyes%, wearing %hat%, with %mouth% mouth, with %pet% pet"
   );
 
   const generate = () => {
     let testcases = [];
 
     for (let i = 0; i < numGen; i++) {
-      const _breed = randomElement(breed);
+      const _necklace = randomElement(necklace);
       const _clothes = randomElement(clothes);
       const _eyes = randomElement(eyes);
       const _hats = randomElement(hats);
@@ -33,7 +33,7 @@ function App() {
       const _pet = randomElement(pet);
 
       const testcase = format
-        .replace(/%breed%/g, _breed)
+        .replace(/%necklace%/g, _necklace)
         .replace(/%clothes%/g, _clothes)
         .replace(/%eyes%/g, _eyes)
         .replace(/%hat%/g, _hats)
