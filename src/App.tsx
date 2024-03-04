@@ -9,6 +9,8 @@ import hats from "./assets/hats.json";
 import mouth from "./assets/mouth.json";
 import pet from "./assets/pet.json";
 
+import { saveAs } from "file-saver";
+
 const randomElement = (myArray: Array<string>) =>
   myArray[Math.floor(Math.random() * myArray.length)];
 
@@ -74,6 +76,19 @@ function App() {
           }}
         >
           Copy
+        </button>
+        <br />
+        <button
+          onClick={() => {
+            const json = textarea.split("\n");
+
+            var file = new File([JSON.stringify(json)], "prompts.json", {
+              type: "application/json;charset=utf-8",
+            });
+            saveAs(file);
+          }}
+        >
+          download JSON
         </button>
       </div>
     </>
